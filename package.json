@@ -1,0 +1,19 @@
+{
+  "name": "curso-nodejs-api-rest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RenatoFrancisco/curso-nodejs-api-rest.git"
+  },
+  "author": "Renato Francisco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RenatoFrancisco/curso-nodejs-api-rest/issues"
+  },
+  "homepage": "https://github.com/RenatoFrancisco/curso-nodejs-api-rest#readme"
+}
