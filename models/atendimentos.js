@@ -3,19 +3,43 @@ const connection = require('../infra/connection');
 
 class Atendimento {
     
-    add(atendimento) {
-        const dataCriacao = moment().format('YYYY-MM-DD HH:MM:SS');
-        const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS');
-        const atendimentoDatado = { ...atendimento, dataCriacao, data };
+    add(atendimento, res) {
+        const dataCriacao = moment().format('YYYY-MM-DD HH:mm:ss');
+        const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
 
-        const sql = 'INSERT INTO Atendimentos SET ?';
+        const isValidDate = moment(data).isSameOrAfter(dataCriacao);
+        const isCustomerValid = atendimento.cliente.length >= 5;
 
-        connection.query(sql, atendimentoDatado, (err, results) => {
-            if (err) 
-                console.log(err)
-            else
-                console.log(results);
-        });        
+        const validations = [
+            {
+                name: 'data',
+                valid: isValidDate,
+                message: 'Data deve ser maior ou igual a data atual'
+            },
+            {
+                name: 'cliente',
+                valid: isCustomerValid,
+                message: 'Cliente deve ter pelo menos cinco caracteres'
+            }
+        ];
+
+        const errs = validations.filter(field => !field.valid);
+        const errorsExists = errs.length;
+
+        if (errorsExists) {
+            res.status(400).json(errs);
+        } else {
+            const atendimentoDatado = { ...atendimento, dataCriacao, data };
+
+            const sql = 'INSERT INTO Atendimentos SET ?';
+    
+            connection.query(sql, atendimentoDatado, (err, results) => {
+                if (err) 
+                    res.status(400).json(err);
+                else
+                    res.status(201).json(results);
+            }); 
+        }
     }
 }
 
