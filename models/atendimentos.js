@@ -1,4 +1,6 @@
+const { json } = require('body-parser');
 const moment = require('moment');
+const { restart } = require('nodemon');
 const connection = require('../infra/connection');
 
 class Atendimento {
@@ -40,6 +42,29 @@ class Atendimento {
                     res.status(201).json(results);
             }); 
         }
+    }
+
+    list(res) {
+        const sql = 'SELECT * FROM Atendimentos;';
+        connection.query(sql, (err, results) => {
+            if (err) {
+                res.status(400).json(err);
+            } else {
+                res.status(200).json(results);
+            }
+        });
+    }
+
+    find(id, res) {
+        const sql = `SELECT * FROM Atendimentos WHERE id = ${id};`
+        connection.query(sql, (err, results) => {
+            const atendimento = results[0];
+            if (err) {
+                res.status(400).json(err);
+            } else {
+                res.status(200).json(results);
+            }
+        });
     }
 }
 
