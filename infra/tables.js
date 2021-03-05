@@ -2,6 +2,7 @@ class Tables {
     init(connection) {
         this.connection = connection;
         this.createAtendimentos();
+        this.createPets();
     }
 
     createAtendimentos() {
@@ -15,6 +16,19 @@ class Tables {
                 console.log(err);
             else
                 console.log('Tabela Atendimentos criada com sucesso!');
+        });
+    }
+
+    createPets() {
+        const query = 'CREATE TABLE IF NOT EXISTS Pets (id int NOT NULL AUTO_INCREMENT, nome varchar(50), ' +
+        'imagem varchar(200), PRIMARY KEY (id))';
+
+        this.connection.query(query, (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Table Pet has been created')
+            }
         });
     }
 }
