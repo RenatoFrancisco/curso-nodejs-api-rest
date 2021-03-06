@@ -1,6 +1,4 @@
-const { json } = require('body-parser');
 const moment = require('moment');
-const { restart } = require('nodemon');
 const connection = require('../infra/connection');
 
 class Atendimento {
