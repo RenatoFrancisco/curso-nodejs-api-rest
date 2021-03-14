@@ -5,27 +5,44 @@ const repository = require('../repositories/atendimento');
 
 class Atendimento {
     
-    add(atendimento) {
-        const dataCriacao = moment().format('YYYY-MM-DD HH:mm:ss');
-        const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
+    constructor() {
 
-        const isValidDate = moment(data).isSameOrAfter(dataCriacao);
-        const isCustomerValid = atendimento.cliente.length >= 5;
+        this.isValidDate = ({ data, creationDate }) => moment(data).isSameOrAfter(creationDate);
+        this.isCustomerValid = (len) => len >= 5;
 
-        const validations = [
+        this.validate = parameters => {
+            this.validations.filter(field => {
+                const { name } = field;
+                const { parameter } = parameters[name];
+
+                return !field.valid(parameter);
+            });
+        };
+
+        this.validations = [
             {
                 name: 'data',
-                valid: isValidDate,
+                valid: this.isValidDate,
                 message: 'Data deve ser maior ou igual a data atual'
             },
             {
                 name: 'cliente',
-                valid: isCustomerValid,
+                valid: this.isCustomerValid,
                 message: 'Cliente deve ter pelo menos cinco caracteres'
             }
         ];
+    }
 
-        const errs = validations.filter(field => !field.valid);
+    add(atendimento) {
+        const dataCriacao = moment().format('YYYY-MM-DD HH:mm:ss');
+        const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
+
+        const parameters = {
+            data: { data, creationDate },
+            cliente: { len: atendimento.cliente.length }
+        };
+
+        const errs = this.validate(parameters);
         const errorsExists = errs.length;
 
         if (errorsExists) {
