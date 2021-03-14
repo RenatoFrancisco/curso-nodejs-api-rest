@@ -5,17 +5,22 @@ class Pet {
     add(pet, res) {
         const query = 'INSERT INTO Pets SET ?';
 
-        uploadFile(pet.imagem, pet.nome, (newPath) => {
-            const newPet = { nome: pet.nome, imagem: newPath, };
+        uploadFile(pet.imagem, pet.nome, (err, newPath) => {
 
-            connection.query(query, newPet, err => {
-                if (erro) {
-                    console.log(err);
-                    res.status(400).json();
-                } else {
-                    res.status(201).json(newPet);
-                }
-            });
+            if (err) {
+                res.status(400).json({err});
+            } else {
+
+                const newPet = { nome: pet.nome, imagem: newPath, };
+                connection.query(query, newPet, err => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json();
+                    } else {
+                        res.status(201).json(newPet);
+                    }
+                });
+            }
         });
     }
 }
