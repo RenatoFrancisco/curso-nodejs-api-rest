@@ -7,17 +7,16 @@ class Atendimento {
     
     constructor() {
 
-        this.isValidDate = ({ data, creationDate }) => moment(data).isSameOrAfter(creationDate);
-        this.isCustomerValid = (len) => len >= 5;
+        this.isValidDate = ({ data, dataCriacao }) => moment(data).isSameOrAfter(dataCriacao);
+        this.isCustomerValid = ({ len }) => len >= 5;
 
-        this.validate = parameters => {
-            this.validations.filter(field => {
-                const { name } = field;
-                const { parameter } = parameters[name];
+        this.validate = parameters =>
+        this.validations.filter(field => {
+            const { name } = field
+            const parameter = parameters[name]
 
-                return !field.valid(parameter);
-            });
-        };
+            return !field.valid(parameter)
+        })
 
         this.validations = [
             {
@@ -38,7 +37,7 @@ class Atendimento {
         const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
 
         const parameters = {
-            data: { data, creationDate },
+            data: { data, dataCriacao },
             cliente: { len: atendimento.cliente.length }
         };
 
@@ -46,7 +45,7 @@ class Atendimento {
         const errorsExists = errs.length;
 
         if (errorsExists) {
-            return new Promise((resolve, reject) => reject(erros));
+            return new Promise((resolve, reject) => reject(errs));
         } else {
             const atendimentoDatado = { ...atendimento, dataCriacao, data };
 
@@ -58,15 +57,8 @@ class Atendimento {
         }
     }
 
-    list(res) {
-        const sql = 'SELECT * FROM Atendimentos;';
-        connection.query(sql, (err, results) => {
-            if (err) {
-                res.status(400).json(err);
-            } else {
-                res.status(200).json(results);
-            }
-        });
+    list() {
+        return repository.list();
     }
 
     find(id, res) {
