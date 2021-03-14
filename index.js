@@ -1,3 +1,4 @@
+require('./servicos/clientes')
 const customExpress = require('./config/customExpress');
 const connection = require('./infra/connection');
 const Tables = require('./infra/tables');
