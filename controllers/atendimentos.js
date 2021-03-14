@@ -7,7 +7,9 @@ module.exports = app => {
 
     app.post('/atendimentos',(req, res) =>  {
         const atendimento = req.body;
-        Atendimento.add(atendimento, res);
+        Atendimento.add(atendimento)
+            .then(atendimentoAdded => res.status(201).json(atendimentoAdded))
+            .catch(errors => res.status(400).json(errors));
     });
 
     app.get('/atendimentos/:id', (req, res) => {
