@@ -16,7 +16,9 @@ module.exports = app => {
 
     app.get('/atendimentos/:id', (req, res) => {
         const id = parseInt(req.params.id);
-        Atendimento.find(id, res);
+        Atendimento.find(id)
+            .then(result => res.json(result))
+            .catch(errors => res.status(400).json(errors));
     });
 
     app.patch('/atendimentos/:id', (req, res) => {

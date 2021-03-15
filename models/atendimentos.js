@@ -61,20 +61,8 @@ class Atendimento {
         return repository.list();
     }
 
-    find(id, res) {
-        const sql = `SELECT * FROM Atendimentos WHERE id = ${id};`
-        connection.query(sql, async (err, results) => {
-            const atendimento = results[0];
-            const cpf = atendimento.cliente;
-
-            if (err) {
-                res.status(400).json(err);
-            } else {
-                const {data} = await axios.get(`http://localhost:8082/${cpf}`);
-                atendimento.cliente = data;
-                res.status(200).json(atendimento);
-            }
-        });
+     find(id) {
+        return repository.find(id);;
     }
 
     update(id, values, res) {
