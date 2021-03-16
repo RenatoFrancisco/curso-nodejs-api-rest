@@ -65,19 +65,12 @@ class Atendimento {
         return repository.find(id);;
     }
 
-    update(id, values, res) {
+    update(id, values) {
         if (values.data) {
             values.data = moment(values.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
         }
 
-        const sql = 'UPDATE Atendimentos SET ? WHERE id = ?';
-        connection.query(sql, [values, id], (err, results) => {
-            if (err) {
-                res.status(400).json(err);
-            } else {
-                res.status(200).json({... values, id});
-            }
-        });
+        return repository.update(id, values)
     }
 
     delete(id, res) {
