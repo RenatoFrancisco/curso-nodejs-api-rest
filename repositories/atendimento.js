@@ -12,13 +12,18 @@ class Atendimento {
     }
 
     find(id) {
-        const sql = `SELECT * FROM Atendimentos WHERE id = ${id};`;
-        return query(sql);
+        const sql = `SELECT * FROM Atendimentos WHERE id = ?`;
+        return query(sql, id);
     }
 
     update(id, values) {
         const sql = 'UPDATE Atendimentos SET ? WHERE id = ?';
         return query(sql, [values, id]);
+    }
+
+    delete(id) {
+        const sql = 'DELETE FROM Atendimentos WHERE id = ?';
+        return query(sql, id);
     }
 }
 

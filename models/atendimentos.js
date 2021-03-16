@@ -73,15 +73,9 @@ class Atendimento {
         return repository.update(id, values)
     }
 
-    delete(id, res) {
+    delete(id,) {
         const sql = 'DELETE FROM Atendimentos WHERE id = ?';
-        connection.query(sql, id, (err, results) => {
-            if (err) {
-                res.status(400).json(err);
-            } else {
-                res.status(200).json({id});
-            }
-        });
+        return repository.delete(id);
     }
 }
 
